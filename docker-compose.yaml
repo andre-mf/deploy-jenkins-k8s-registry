@@ -1,0 +1,49 @@
+version: '3.4'
+services:
+  jenkins:
+    image: jenkinsci/blueocean:latest
+    environment: 
+      JENKINS_OPTS: '--httpPort=8085'
+    volumes: 
+      - ~/jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    network_mode: host
+    user: '0'
+    restart: always
+  docker-registry:
+    image: registry:latest
+    volumes:
+      - docker-registry-data:/var/lib/registry
+      - ./certs:/certs
+      - ./auth:/auth
+    environment:
+      REGISTRY_HTTP_TLS_CERTIFICATE: /certs/domain.crt
+      REGISTRY_HTTP_TLS_KEY: /certs/domain.key
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+      REGISTRY_STORAGE_DELETE_ENABLED: 'true'
+    ports:
+      - "5000:5000"
+    networks:
+      - registry-ui-net
+    restart: always
+  registry-ui:
+    image: joxit/docker-registry-ui:latest
+    ports:
+      - 8086:80
+    environment:
+      - REGISTRY_TITLE=My Private Docker Registry
+      - NGINX_PROXY_PASS_URL=https://docker-registry:5000
+      - SINGLE_REGISTRY=true
+      - REGISTRY_ALLOW_DELETE=true
+      - DELETE_IMAGES=true
+    depends_on:
+      - docker-registry
+    networks:
+      - registry-ui-net
+    restart: always
+networks:
+    registry-ui-net:
+volumes:
+  docker-registry-data: {}

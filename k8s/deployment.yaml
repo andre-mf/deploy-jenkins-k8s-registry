@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world-nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: 192.168.1.92:5000/hello-world-nginx:{{tag}}
+          ports:
+            - containerPort: 80
+      imagePullSecrets:
+        - name: registrycredentials
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-world-nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+    - port: 80
+      nodePort: 30001
+  type: NodePort

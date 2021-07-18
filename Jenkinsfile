@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Get source') {
             steps {
-                git url: 'https://github.com/andre-mf/novo', branch: 'main'
+                git url: 'https://github.com/andre-mf/deploy-jenkins-k8s-registry', branch: 'main'
             }
         }
         stage('Docker Build') {

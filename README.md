@@ -68,6 +68,6 @@ Para implementar a solução, basta seguir as instruções abaixo.
 - Em *Branches to build* - *Branch Specifier (blank for 'any')*, informar a branche do repositório;
 - Salvar
  ### *Webhook* no GitHub
- - No repositório do GitHub, ir em *Settings* - *Webhooks* - *Add webhook* - *Payload URL* - informar o endereço externo do servidor Docker (ex: http://ip-externo:8085/github-webhook/);
+ - No repositório do GitHub, ir em *Settings* - *Webhooks* - *Add webhook* - *Payload URL* - informar o endereço externo do servidor Jenkins (ex: http://ip-externo:8085/github-webhook/);
  - *Content Type* - selecionar application/json;
  - Add webhook..
